@@ -2,7 +2,7 @@ GET http://localhost:5164/games
 
 
 ###
-GET http://localhost:5164/games/2
+GET http://localhost:5164/games/4
 
 ###
 
@@ -27,5 +27,5 @@ Content-Type: application/json
   "Price": 20.95,
   "ReleaseDate": "2011-11-20"
 }
-
+###
 DELETE http://localhost:5164/games/4
