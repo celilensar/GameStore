@@ -15,3 +15,15 @@ Content-Type: application/json
   "Price": 26.95,
   "ReleaseDate": "2011-11-18"
 }
+
+###
+
+PUT http://localhost:5164/games/3
+Content-Type: application/json
+
+{
+  "Name": "Minecraft Turbo",
+  "Genre": "Sandbox",
+  "Price": 20.95,
+  "ReleaseDate": "2011-11-20"
+}
