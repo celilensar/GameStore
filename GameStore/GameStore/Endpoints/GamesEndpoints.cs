@@ -5,7 +5,7 @@ namespace GameStore.Endpoints;
 
 public static class GameEndpoints
 {
-    const string GetGameEndpointName="GetGame";
+    const string GetGameEndpointName = "GetGame";
     private readonly static List<GameDto> games = [
     new (
     1,
@@ -48,65 +48,71 @@ new (
 
 
 
-public static RouteGroupBuilder MapGamesEndPoints(this WebApplication app )
-{
-    var group = app.MapGroup("games");
-//GET "games"
-group.MapGet("/", () => games);
+    public static RouteGroupBuilder MapGamesEndPoints(this WebApplication app)
+    {
+        var group = app.MapGroup("games")
+                    .WithParameterValidation();
 
-//GET /games/4
-group.MapGet("/{id}", (int id) =>
-{
-   GameDto? game= games.Find(game => game.Id == id);
-    
-    return game is null ? Results.NotFound() : Results.Ok(game);
-}
-).WithName(GetGameEndpointName);
+        //GET "games"
+        group.MapGet("/", () => games);
 
-//POST /games
-group.MapPost("/", (CreateGameDto newGame) => 
-{
-    GameDto game= new(
-        games.Count +1,
-        newGame.Name,
-        newGame.Genre,
-        newGame.Price,
-        newGame.ReleaseDate
-    );
+        //GET /games/4
+        group.MapGet("/{id}", (int id) =>
+        {
+            GameDto? game = games.Find(game => game.Id == id);
 
-    games.Add(game);
-    return Results.CreatedAtRoute(GetGameEndpointName, new {id = game.Id}, game);
-});
+            return game is null ? Results.NotFound() : Results.Ok(game);
+        }
+        ).WithName(GetGameEndpointName);
 
-//PUT /games
+        //POST /games
+        group.MapPost("/", (CreateGameDto newGame) =>
+        {
 
-group.MapPut("/{id}",(int id, UpdateGameDto updatedGame)=>
+            GameDto game = new(
+                games.Count + 1,
+                newGame.Name,
+                newGame.Genre,
+                newGame.Price,
+                newGame.ReleaseDate
+            );
 
-{
-    var index= games.FindIndex(game=> game.Id == id);
-    
-    if (index == -1){
-        Results.NotFound();
+            games.Add(game);
+            return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id }, game);
+        });
+
+
+        //PUT /games
+
+        group.MapPut("/{id}", (int id, UpdateGameDto updatedGame) =>
+
+        {
+            var index = games.FindIndex(game => game.Id == id);
+
+            if (index == -1)
+            {
+                Results.NotFound();
+            }
+
+            games[index] = new GameDto(
+            id,
+            updatedGame.Name,
+            updatedGame.Genre,
+            updatedGame.Price,
+            updatedGame.ReleaseDate);
+
+            return Results.NoContent();
+        });
+
+        group.MapDelete("/{id}", (int id) =>
+        {
+            games.RemoveAll(game => game.Id == id);
+            return Results.NoContent();
+        });
+
+
+        return group;
     }
-
-    games[index] = new GameDto(
-    id,
-    updatedGame.Name,
-    updatedGame.Genre,
-    updatedGame.Price,
-    updatedGame.ReleaseDate);
-    
-    return Results.NoContent();
-});
-
-group.MapDelete("/{id}", (int id)=>{
-    games.RemoveAll(game=>game.Id == id);
-    return Results.NoContent();
-});
-
-
-return group;
-}
 }
 
 
