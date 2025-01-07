@@ -1,12 +1,27 @@
 using System;
 using GameStore.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 
-namespace GameStore.Data;
-
-public class GameStoreContext(DbContextOptions<GameStoreContext> options) : DbContext(options)
+namespace GameStore.Data
 {
-    public DbSet<Game> Games => Set<Game>();
-    public DbSet<Genre> Genres => Set<Genre>();
+    public class GameStoreContext : DbContext
+    {
+        public GameStoreContext(DbContextOptions<GameStoreContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Game> Games { get; set; } = null!;
+        public DbSet<Genre> Genres { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre { Id = 1, Name = "Fighting" },
+                new Genre { Id = 2, Name = "RolePlaying" },
+                new Genre { Id = 3, Name = "Sports" },
+                new Genre { Id = 4, Name = "Racing" }
+            );
+        }
+    }
 }
