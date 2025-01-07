@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Bağlantı dizesini al
 var connString = builder.Configuration.GetConnectionString("GameStore");
-
 // DbContext yapılandırması
 builder.Services.AddDbContext<GameStoreContext>(options =>
     options.UseSqlite(connString));

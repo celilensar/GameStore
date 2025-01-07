@@ -10,10 +10,10 @@ POST http://localhost:5164/games
 Content-Type: application/json
 
 {
-  "Name": "Minecraft",
-  "Genre": "Sandbox",
-  "Price": 26.95,
-  "ReleaseDate": "2011-11-18"
+  "Name": "Final Fantasy",
+  "GenreId": 2,
+  "Price": 8.99,
+  "ReleaseDate": "2011-12-18"
 }
 
 ###

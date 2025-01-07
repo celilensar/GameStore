@@ -1,5 +1,10 @@
 using System;
+using System.Data.Common;
+using GameStore.Data;
 using GameStore.Dtos;
+using GameStore.Entities;
+using GameStore.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Endpoints;
 
@@ -66,19 +71,21 @@ new (
         ).WithName(GetGameEndpointName);
 
         //POST /games
-        group.MapPost("/", (CreateGameDto newGame) =>
+        group.MapPost("/", (CreateGameDto newGame, GameStoreContext dbContext) =>
         {
+            Game game = newGame.ToEntity();
+            game.Genre = dbContext.Genres.Find(newGame.genreId);
 
-            GameDto game = new(
-                games.Count + 1,
-                newGame.Name,
-                newGame.Genre,
-                newGame.Price,
-                newGame.ReleaseDate
-            );
 
-            games.Add(game);
-            return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id }, game);
+            dbContext.Games.Add(game);
+            dbContext.SaveChanges();
+
+
+
+            return Results.CreatedAtRoute(
+                GetGameEndpointName,
+                new { id = game.Id },
+                game.ToDto());
         });
 
 
