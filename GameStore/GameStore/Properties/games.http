@@ -2,7 +2,7 @@ GET http://localhost:5164/games
 
 
 ###
-GET http://localhost:5164/games/4
+GET http://localhost:5164/games/1
 
 ###
 
@@ -10,7 +10,7 @@ POST http://localhost:5164/games
 Content-Type: application/json
 
 {
-  "Name": "Final Fantasy",
+  "Name": "Batman",
   "GenreId": 2,
   "Price": 8.99,
   "ReleaseDate": "2011-12-18"
